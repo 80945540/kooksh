@@ -20,6 +20,41 @@ class XMLResolve():
         for i in range(len(subElementObj)):
             print (subElementObj[i].getAttribute(elementAttribute))
 
+    #获取某标签下某属性值  该标签需提供 属性及属性值来查找 而且该属性及值是唯一
+    @staticmethod
+    def getElementAttributeValueByKV(xmlfilepath,elementName,elementAttribute,elementAttributeValue):
+        # 得到文档对象
+        domobj = xmldom.parse(xmlfilepath)
+        # 得到元素对象
+        elementobj = domobj.documentElement
+        # 获得子标签
+        subElementObj = elementobj.getElementsByTagName(elementName)
+        # 获得标签属性值
+        for element in subElementObj:
+            if element.getAttribute(elementAttribute) == elementAttributeValue:
+                for key in element.attributes.keys():
+                    attr = element.attributes[key]
+                    value = attr.value
+                    print key+"="+value
+
+    # 获取某标签下某属性值  该标签需提供 属性及属性值来查找 而且该属性及值是唯一
+    @staticmethod
+    def getElementAttributeValueByKVA(xmlfilepath, elementName, elementAttribute, elementAttributeValue,requireAttributeValueByAttribute):
+        # 得到文档对象
+        domobj = xmldom.parse(xmlfilepath)
+        # 得到元素对象
+        elementobj = domobj.documentElement
+        # 获得子标签
+        subElementObj = elementobj.getElementsByTagName(elementName)
+        # 获得标签属性值
+        for element in subElementObj:
+            if element.getAttribute(elementAttribute) == elementAttributeValue:
+                for key in element.attributes.keys():
+                    attr = element.attributes[key]
+                    value = attr.value
+                    if key == requireAttributeValueByAttribute:
+                        print attr.value
+
     #根据标签名字获取标签
     def getElementByName(self,xmlfilepath,tagElement,elementName):
         # 得到文档对象
@@ -56,7 +91,7 @@ if __name__ == '__main__':
     args = [xmlFile] + sys.argv[3:len(sys.argv)]
     #print args
     if len(args) != argcount:
-        print "参数个人不匹配"
+        print "参数个人不匹配,已经给到%d参数,需要%d参数"%(len(args),argcount)
         exit(0)
     kwargs = {}
     eval("XMLResolve."+functionName)(*args, **kwargs) # 使用这个动态调用方法 、必须在方法头部 加上 @staticmethod
